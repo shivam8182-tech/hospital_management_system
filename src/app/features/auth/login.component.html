@@ -1,0 +1,42 @@
+<main class="login-page">
+  <section class="login-card">
+    <div class="brand">
+      <div class="logo">H</div>
+      <div>
+        <h1>Hospital Management</h1>
+        <p>Secure staff portal</p>
+      </div>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+      <label>Username</label>
+      <input formControlName="username" placeholder="Enter username">
+      @if (loginForm.controls.username.touched && loginForm.controls.username.invalid) {
+        <small class="error">Username is required.</small>
+      }
+
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="Enter password">
+      @if (loginForm.controls.password.touched && loginForm.controls.password.errors?.['required']) {
+        <small class="error">Password is required.</small>
+      }
+      @if (loginForm.controls.password.touched && loginForm.controls.password.errors?.['minlength']) {
+        <small class="error">Password must contain at least 8 characters.</small>
+      }
+
+      <label>Confirm Password</label>
+      <input type="password" formControlName="confirmPassword" placeholder="Confirm password">
+      @if (loginForm.touched && loginForm.errors?.['fieldsMismatch']) {
+        <small class="error">Password and confirm password must match.</small>
+      }
+
+      @if (error) {
+        <div class="error-box">{{ error }}</div>
+      }
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="demo">Demo: <strong>admin</strong> / <strong>Admin&#64;123</strong></p>
+  </section>
+</main>

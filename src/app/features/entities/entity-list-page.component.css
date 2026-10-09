@@ -1,0 +1,1 @@
+.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.heading h1{margin:0}.heading p{margin:5px 0;color:#64748b}.add{background:#1769aa;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none}@media(max-width:600px){.heading{display:block}.add{display:inline-block;margin-top:12px}}

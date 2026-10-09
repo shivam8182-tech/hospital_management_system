@@ -1,0 +1,28 @@
+<section class="details-page">
+  <a class="back" [routerLink]="['/dashboard', type || 'patient']">← Back to list</a>
+
+  @if (error) {
+    <div class="error-box">{{ error }}</div>
+  } @else if (entity) {
+    <div class="card">
+      <div class="header">
+        <div>
+          <p class="eyebrow">{{ type }}</p>
+          <h1>{{ entity.name }}</h1>
+        </div>
+        <span class="status">{{ entity.status | statusLabel }}</span>
+      </div>
+
+      <div class="grid">
+        @for (item of entity | keyvalue; track item.key) {
+          @if (item.key !== 'id') {
+            <div class="field">
+              <span>{{ item.key }}</span>
+              <strong>{{ item.value }}</strong>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</section>

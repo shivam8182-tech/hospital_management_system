@@ -1,0 +1,206 @@
+<div class="add-staff-page">
+
+  <div class="form-card">
+
+    <div class="form-header">
+      <h2>Add Staff</h2>
+      <p>Enter staff information below</p>
+    </div>
+
+    <form [formGroup]="staffForm" (ngSubmit)="saveStaff()">
+
+
+      <!-- Personal Information -->
+      <h3>Personal Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>First Name *</label>
+          <input
+            type="text"
+            formControlName="firstName"
+            placeholder="Enter first name"
+          >
+
+          <small
+            *ngIf="staffForm.get('firstName')?.touched &&
+                   staffForm.get('firstName')?.invalid">
+            First name is required
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input
+            type="text"
+            formControlName="lastName"
+            placeholder="Enter last name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input
+            type="date"
+            formControlName="dateOfBirth"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Gender *</label>
+
+          <select formControlName="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Contact Information -->
+      <h3>Contact Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Phone *</label>
+          <input
+            type="text"
+            formControlName="phone"
+            maxlength="10"
+            placeholder="Enter 10 digit number"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter email"
+          >
+        </div>
+
+      </div>
+
+      <!-- Professional Information -->
+      <h3>Professional Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Staff ID *</label>
+          <input
+            type="text"
+            formControlName="staffId"
+            placeholder="Enter staff ID"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Role *</label>
+
+          <select formControlName="role">
+            <option value="">Select Role</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Nurse">Nurse</option>
+            <option value="Receptionist">Receptionist</option>
+            <option value="Technician">Technician</option>
+            <option value="Manager">Manager</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Department *</label>
+
+          <select formControlName="department">
+            <option value="">Select Department</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Emergency">Emergency</option>
+            <option value="Radiology">Radiology</option>
+            <option value="Pharmacy">Pharmacy</option>
+            <option value="Administration">Administration</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Joining Date *</label>
+
+          <input
+            type="date"
+            formControlName="joiningDate"
+          >
+        </div>
+
+      </div>
+
+      <!-- Address -->
+      <h3>Address</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group full-width">
+          <label>Address</label>
+
+          <textarea
+            formControlName="address"
+            placeholder="Enter address"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>City</label>
+          <input
+            type="text"
+            formControlName="city"
+            placeholder="Enter city"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>State</label>
+          <input
+            type="text"
+            formControlName="state"
+            placeholder="Enter state"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>ZIP Code</label>
+          <input
+            type="text"
+            formControlName="zipCode"
+            placeholder="Enter ZIP code"
+          >
+        </div>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="staffForm.reset()">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn-save">
+          Save Staff
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

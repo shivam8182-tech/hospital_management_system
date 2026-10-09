@@ -1,0 +1,336 @@
+.add-patient-page {
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+.form-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-header {
+  margin-bottom: 25px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.form-header p {
+  margin: 5px 0 0;
+  color: #777;
+}
+
+/* =========================
+   STEPPER
+========================= */
+
+.stepper {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.stepper-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+}
+
+.stepper-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #ccc;
+  color: #777;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  z-index: 1;
+}
+
+.stepper-label {
+  font-size: 12px;
+  color: #777;
+  margin-top: 6px;
+  max-width: 120px;
+}
+
+.stepper-line {
+  position: absolute;
+
+  top: 17px;
+  left: 50%;
+
+  width: 100%;
+  height: 2px;
+
+  background: #ddd;
+
+  z-index: 0;
+}
+
+.stepper-item.active .stepper-circle {
+  border-color: #1976d2;
+  color: #1976d2;
+  box-shadow: 0 0 0 4px #e3f2fd;
+}
+
+.stepper-item.active .stepper-label {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.stepper-item.done .stepper-circle {
+  background: #2e7d32;
+  border-color: #2e7d32;
+  color: white;
+}
+
+.stepper-item.done .stepper-line {
+  background: #2e7d32;
+}
+
+
+/* =========================
+   WIDGET
+========================= */
+
+.widget-card {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+
+  border-bottom: 1px solid #ddd;
+}
+
+.widget-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.widget-header p {
+  margin: 3px 0 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.widget-icon {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 10px;
+
+  background: #e3f2fd;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #1976d2;
+}
+
+.form-group textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-group small {
+  color: #d32f2f;
+  margin-top: 5px;
+}
+
+
+/* =========================
+   FORM ARRAY
+========================= */
+
+.array-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  padding: 18px;
+  margin-bottom: 15px;
+
+  background: #fafafa;
+}
+
+.array-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 15px;
+}
+
+.btn-remove {
+  border: none;
+  background: #ffebee;
+  color: #d32f2f;
+
+  padding: 6px 10px;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.btn-add {
+  width: fit-content;
+
+  padding: 9px 15px;
+
+  border: 1px solid #1976d2;
+  background: white;
+  color: #1976d2;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  margin-top: 5px;
+}
+
+.btn-add:hover {
+  background: #e3f2fd;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.widget-footer {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: auto;
+  padding-top: 20px;
+
+  border-top: 1px solid #ddd;
+
+  margin-top: 25px;
+}
+
+.btn-back,
+.btn-next,
+.btn-save {
+  padding: 10px 20px;
+
+  border: none;
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.btn-back {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-next,
+.btn-save {
+  background: #1976d2;
+  color: white;
+}
+
+.btn-next:hover,
+.btn-save:hover {
+  background: #125ea8;
+}
+
+.btn-back:hover {
+  background: #ccc;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+  .add-patient-page {
+    margin: 15px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .stepper-label {
+    display: none;
+  }
+
+}

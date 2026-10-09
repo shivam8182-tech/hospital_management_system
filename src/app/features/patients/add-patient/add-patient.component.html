@@ -1,0 +1,953 @@
+<div class="add-patient-page">
+
+  <div class="form-card">
+
+    <!-- HEADER -->
+
+    <div class="form-header">
+
+      <h2>Add New Patient</h2>
+
+      <p>
+        Enter patient information step by step
+      </p>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- STEPPER -->
+    <!-- ========================= -->
+
+    <div class="stepper">
+
+      <div
+        class="stepper-item"
+        *ngFor="let step of steps; let i = index"
+        [class.active]="currentStep === i"
+        [class.done]="currentStep > i"
+        (click)="goToStep(i)"
+      >
+
+        <div class="stepper-circle">
+
+          {{ i + 1 }}
+
+        </div>
+
+        <div class="stepper-label">
+
+          {{ step.title }}
+
+        </div>
+
+        <div
+          class="stepper-line"
+          *ngIf="i < steps.length - 1"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- MAIN FORM -->
+    <!-- ========================= -->
+
+    <form [formGroup]="patientForm">
+
+
+      <!-- ================================= -->
+      <!-- WIDGET 1 - PERSONAL INFORMATION -->
+      <!-- ================================= -->
+
+      <div
+        class="widget-card"
+        *ngIf="currentStep === 0"
+        formGroupName="personalInfo"
+      >
+
+        <div class="widget-header">
+
+          <div class="widget-icon">
+            👤
+          </div>
+
+          <div>
+
+            <h3>Personal Information</h3>
+
+            <p>
+              Enter basic patient information
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>First Name *</label>
+
+            <input
+              type="text"
+              formControlName="firstName"
+              placeholder="Enter first name"
+            >
+
+            <small
+              *ngIf="
+                patientForm.get('personalInfo.firstName')?.touched &&
+                patientForm.get('personalInfo.firstName')?.invalid
+              "
+            >
+              First name is required
+            </small>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Last Name *</label>
+
+            <input
+              type="text"
+              formControlName="lastName"
+              placeholder="Enter last name"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Date of Birth *</label>
+
+            <input
+              type="date"
+              formControlName="dateOfBirth"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Gender *</label>
+
+            <select formControlName="gender">
+
+              <option value="">
+                Select Gender
+              </option>
+
+              <option value="Male">
+                Male
+              </option>
+
+              <option value="Female">
+                Female
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Marital Status</label>
+
+            <select formControlName="maritalStatus">
+
+              <option value="">
+                Select
+              </option>
+
+              <option value="Single">
+                Single
+              </option>
+
+              <option value="Married">
+                Married
+              </option>
+
+              <option value="Divorced">
+                Divorced
+              </option>
+
+              <option value="Widowed">
+                Widowed
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="widget-footer">
+
+          <div></div>
+
+          <button
+            type="button"
+            class="btn-next"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- WIDGET 2 - CONTACT -->
+      <!-- ================================= -->
+
+      <div
+        class="widget-card"
+        *ngIf="currentStep === 1"
+        formGroupName="contactInfo"
+      >
+
+        <div class="widget-header">
+
+          <div class="widget-icon">
+            📞
+          </div>
+
+          <div>
+
+            <h3>Contact Information</h3>
+
+            <p>
+              Enter patient contact details
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>Phone *</label>
+
+            <input
+              type="text"
+              formControlName="phone"
+              maxlength="10"
+              placeholder="Enter 10 digit number"
+            >
+
+            <small
+              *ngIf="
+                patientForm.get('contactInfo.phone')?.touched &&
+                patientForm.get('contactInfo.phone')?.invalid
+              "
+            >
+              Enter a valid 10 digit phone number
+            </small>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Email *</label>
+
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Enter email"
+            >
+
+            <small
+              *ngIf="
+                patientForm.get('contactInfo.email')?.touched &&
+                patientForm.get('contactInfo.email')?.invalid
+              "
+            >
+              Enter a valid email
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="widget-footer">
+
+          <button
+            type="button"
+            class="btn-back"
+            (click)="previousStep()"
+          >
+            Back
+          </button>
+
+          <button
+            type="button"
+            class="btn-next"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- WIDGET 3 - ADDRESS FORM ARRAY -->
+      <!-- ================================= -->
+
+      <div
+        class="widget-card"
+        *ngIf="currentStep === 2"
+      >
+
+        <div class="widget-header">
+
+          <div class="widget-icon">
+            🏠
+          </div>
+
+          <div>
+
+            <h3>Patient Address</h3>
+
+            <p>
+              Add one or more patient addresses
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div formArrayName="addresses">
+
+          <div
+            class="array-card"
+            *ngFor="
+              let address of addresses.controls;
+              let i = index
+            "
+            [formGroupName]="i"
+          >
+
+            <div class="array-header">
+
+              <strong>
+                Address {{ i + 1 }}
+              </strong>
+
+              <button
+                type="button"
+                class="btn-remove"
+                (click)="removeAddress(i)"
+              >
+                Remove
+              </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+              <div class="form-group">
+
+                <label>Address Type</label>
+
+                <select formControlName="addressType">
+
+                  <option value="Home">
+                    Home
+                  </option>
+
+                  <option value="Work">
+                    Work
+                  </option>
+
+                  <option value="Other">
+                    Other
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Address *</label>
+
+                <input
+                  type="text"
+                  formControlName="address"
+                  placeholder="Enter address"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>City *</label>
+
+                <input
+                  type="text"
+                  formControlName="city"
+                  placeholder="Enter city"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>State *</label>
+
+                <input
+                  type="text"
+                  formControlName="state"
+                  placeholder="Enter state"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>ZIP Code *</label>
+
+                <input
+                  type="text"
+                  formControlName="zipCode"
+                  placeholder="Enter ZIP code"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="btn-add"
+          (click)="addAddress()"
+        >
+          + Add Another Address
+        </button>
+
+
+        <div class="widget-footer">
+
+          <button
+            type="button"
+            class="btn-back"
+            (click)="previousStep()"
+          >
+            Back
+          </button>
+
+          <button
+            type="button"
+            class="btn-next"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- WIDGET 4 - EMERGENCY CONTACT -->
+      <!-- ================================= -->
+
+      <div
+        class="widget-card"
+        *ngIf="currentStep === 3"
+      >
+
+        <div class="widget-header">
+
+          <div class="widget-icon">
+            🚨
+          </div>
+
+          <div>
+
+            <h3>Emergency Contact</h3>
+
+            <p>
+              Add emergency contact information
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div formArrayName="emergencyContacts">
+
+          <div
+            class="array-card"
+            *ngFor="
+              let contact of emergencyContacts.controls;
+              let i = index
+            "
+            [formGroupName]="i"
+          >
+
+            <div class="array-header">
+
+              <strong>
+                Emergency Contact {{ i + 1 }}
+              </strong>
+
+              <button
+                type="button"
+                class="btn-remove"
+                (click)="removeEmergencyContact(i)"
+              >
+                Remove
+              </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+              <div class="form-group">
+
+                <label>Name *</label>
+
+                <input
+                  type="text"
+                  formControlName="name"
+                  placeholder="Enter name"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Relationship *</label>
+
+                <select formControlName="relationship">
+
+                  <option value="">
+                    Select Relationship
+                  </option>
+
+                  <option value="Father">
+                    Father
+                  </option>
+
+                  <option value="Mother">
+                    Mother
+                  </option>
+
+                  <option value="Spouse">
+                    Spouse
+                  </option>
+
+                  <option value="Brother">
+                    Brother
+                  </option>
+
+                  <option value="Sister">
+                    Sister
+                  </option>
+
+                  <option value="Friend">
+                    Friend
+                  </option>
+
+                  <option value="Other">
+                    Other
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Phone *</label>
+
+                <input
+                  type="text"
+                  formControlName="phone"
+                  maxlength="10"
+                  placeholder="Enter phone"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="btn-add"
+          (click)="addEmergencyContact()"
+        >
+          + Add Emergency Contact
+        </button>
+
+
+        <div class="widget-footer">
+
+          <button
+            type="button"
+            class="btn-back"
+            (click)="previousStep()"
+          >
+            Back
+          </button>
+
+          <button
+            type="button"
+            class="btn-next"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- WIDGET 5 - MEDICAL INFORMATION -->
+      <!-- ================================= -->
+
+      <div
+        class="widget-card"
+        *ngIf="currentStep === 4"
+        formGroupName="medicalInfo"
+      >
+
+        <div class="widget-header">
+
+          <div class="widget-icon">
+            🩺
+          </div>
+
+          <div>
+
+            <h3>Medical Information</h3>
+
+            <p>
+              Enter patient medical information
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>Blood Group</label>
+
+            <select formControlName="bloodGroup">
+
+              <option value="">
+                Select Blood Group
+              </option>
+
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Allergies</label>
+
+            <input
+              type="text"
+              formControlName="allergies"
+              placeholder="Enter allergies"
+            >
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label>Medical Conditions</label>
+
+            <textarea
+              formControlName="medicalConditions"
+              placeholder="Enter medical conditions"
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label>Current Medications</label>
+
+            <textarea
+              formControlName="currentMedications"
+              placeholder="Enter current medications"
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label>Previous Surgeries</label>
+
+            <textarea
+              formControlName="previousSurgeries"
+              placeholder="Enter previous surgeries"
+            ></textarea>
+
+          </div>
+
+        </div>
+
+
+        <div class="widget-footer">
+
+          <button
+            type="button"
+            class="btn-back"
+            (click)="previousStep()"
+          >
+            Back
+          </button>
+
+          <button
+            type="button"
+            class="btn-next"
+            (click)="nextStep()"
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================= -->
+      <!-- WIDGET 6 - INSURANCE FORM ARRAY -->
+      <!-- ================================= -->
+
+      <div
+        class="widget-card"
+        *ngIf="currentStep === 5"
+      >
+
+        <div class="widget-header">
+
+          <div class="widget-icon">
+            🛡️
+          </div>
+
+          <div>
+
+            <h3>Insurance Information</h3>
+
+            <p>
+              Add patient insurance details
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div formArrayName="insurance">
+
+          <div
+            class="array-card"
+            *ngFor="
+              let item of insurance.controls;
+              let i = index
+            "
+            [formGroupName]="i"
+          >
+
+            <div class="array-header">
+
+              <strong>
+                Insurance {{ i + 1 }}
+              </strong>
+
+              <button
+                type="button"
+                class="btn-remove"
+                (click)="removeInsurance(i)"
+              >
+                Remove
+              </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+              <div class="form-group">
+
+                <label>Insurance Provider *</label>
+
+                <input
+                  type="text"
+                  formControlName="providerName"
+                  placeholder="Insurance company"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Policy Number *</label>
+
+                <input
+                  type="text"
+                  formControlName="policyNumber"
+                  placeholder="Policy number"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Member ID</label>
+
+                <input
+                  type="text"
+                  formControlName="memberId"
+                  placeholder="Member ID"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Group Number</label>
+
+                <input
+                  type="text"
+                  formControlName="groupNumber"
+                  placeholder="Group number"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>Insurance Type</label>
+
+                <select formControlName="insuranceType">
+
+                  <option value="Primary">
+                    Primary
+                  </option>
+
+                  <option value="Secondary">
+                    Secondary
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="btn-add"
+          (click)="addInsurance()"
+        >
+          + Add Another Insurance
+        </button>
+
+
+        <div class="widget-footer">
+
+          <button
+            type="button"
+            class="btn-back"
+            (click)="previousStep()"
+          >
+            Back
+          </button>
+
+          <button
+            type="button"
+            class="btn-save"
+            (click)="savePatient()"
+          >
+            Save Patient
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

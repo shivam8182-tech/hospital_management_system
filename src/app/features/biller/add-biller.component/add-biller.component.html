@@ -1,0 +1,278 @@
+<div class="add-biller-page">
+
+  <div class="form-card">
+
+    <div class="form-header">
+      <h2>Add Biller</h2>
+      <p>Enter billing staff information</p>
+    </div>
+
+    <form
+      [formGroup]="billerForm"
+      (ngSubmit)="saveBiller()"
+    >
+
+      <!-- Biller Information -->
+
+      <h3>Biller Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>First Name *</label>
+
+          <input
+            type="text"
+            formControlName="firstName"
+            placeholder="Enter first name"
+          >
+
+          <small
+            *ngIf="
+              billerForm.get('firstName')?.touched &&
+              billerForm.get('firstName')?.invalid
+            "
+          >
+            First name is required
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Last Name *</label>
+
+          <input
+            type="text"
+            formControlName="lastName"
+            placeholder="Enter last name"
+          >
+
+          <small
+            *ngIf="
+              billerForm.get('lastName')?.touched &&
+              billerForm.get('lastName')?.invalid
+            "
+          >
+            Last name is required
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Gender *</label>
+
+          <select formControlName="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Date of Birth</label>
+
+          <input
+            type="date"
+            formControlName="dateOfBirth"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- Professional Information -->
+
+      <h3>Professional Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Biller ID *</label>
+
+          <input
+            type="text"
+            formControlName="billerId"
+            placeholder="Enter biller ID"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Role *</label>
+
+          <select formControlName="role">
+            <option value="">Select Role</option>
+            <option value="Medical Biller">Medical Biller</option>
+            <option value="Billing Specialist">
+              Billing Specialist
+            </option>
+            <option value="Billing Manager">
+              Billing Manager
+            </option>
+            <option value="Claims Specialist">
+              Claims Specialist
+            </option>
+            <option value="RCM Specialist">
+              RCM Specialist
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Department *</label>
+
+          <select formControlName="department">
+            <option value="">Select Department</option>
+            <option value="Billing">Billing</option>
+            <option value="Accounts">Accounts</option>
+            <option value="RCM">Revenue Cycle Management</option>
+            <option value="Claims">Claims</option>
+            <option value="Administration">
+              Administration
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Employee Type *</label>
+
+          <select formControlName="employeeType">
+            <option value="">Select Employee Type</option>
+            <option value="Full Time">Full Time</option>
+            <option value="Part Time">Part Time</option>
+            <option value="Contract">Contract</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Joining Date *</label>
+
+          <input
+            type="date"
+            formControlName="joiningDate"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- Contact Information -->
+
+      <h3>Contact Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Phone *</label>
+
+          <input
+            type="text"
+            formControlName="phone"
+            maxlength="10"
+            placeholder="Enter 10 digit phone number"
+          >
+
+          <small
+            *ngIf="
+              billerForm.get('phone')?.touched &&
+              billerForm.get('phone')?.invalid
+            "
+          >
+            Enter a valid 10 digit phone number
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter email"
+          >
+
+          <small
+            *ngIf="
+              billerForm.get('email')?.touched &&
+              billerForm.get('email')?.invalid
+            "
+          >
+            Enter a valid email address
+          </small>
+        </div>
+
+      </div>
+
+
+      <!-- Address -->
+
+      <h3>Address</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group full-width">
+          <label>Address</label>
+
+          <textarea
+            formControlName="address"
+            placeholder="Enter complete address"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>City</label>
+
+          <input
+            type="text"
+            formControlName="city"
+            placeholder="Enter city"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>State</label>
+
+          <input
+            type="text"
+            formControlName="state"
+            placeholder="Enter state"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>ZIP Code</label>
+
+          <input
+            type="text"
+            formControlName="zipCode"
+            placeholder="Enter ZIP code"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- Buttons -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="resetForm()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn-save"
+        >
+          Save Biller
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="logo">H</span><strong>HMS</strong></div>
+    <nav>
+      <a routerLink="/dashboard/patient" routerLinkActive="active">Patients</a>
+      <a routerLink="/dashboard/staff" routerLinkActive="active">Staff</a>
+      <a routerLink="/dashboard/provider" routerLinkActive="active">Providers</a>
+      <a routerLink="/dashboard/biller" routerLinkActive="active">Billers</a>
+    </nav>
+    <button class="logout" (click)="logout()">Logout</button>
+  </aside>
+
+  <section class="content">
+    <header class="topbar">
+      <div>
+        <h2>Hospital Management System</h2>
+        <p>Manage patients, staff, providers and billing users.</p>
+      </div>
+      <span class="secure">Authenticated</span>
+    </header>
+    <main class="page"><router-outlet /></main>
+  </section>
+</div>

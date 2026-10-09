@@ -1,0 +1,359 @@
+<div class="add-provider-page">
+
+  <div class="form-card">
+
+    <div class="form-header">
+      <h2>Add Provider</h2>
+      <p>Add doctor/provider information</p>
+    </div>
+
+    <form
+      [formGroup]="providerForm"
+      (ngSubmit)="saveProvider()"
+    >
+
+      <!-- Doctor Information -->
+
+      <h3>Doctor Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>First Name *</label>
+
+          <input
+            type="text"
+            formControlName="firstName"
+            placeholder="Enter first name"
+          >
+
+          <small
+            *ngIf="
+              providerForm.get('firstName')?.touched &&
+              providerForm.get('firstName')?.invalid
+            "
+          >
+            First name is required
+          </small>
+        </div>
+
+
+        <div class="form-group">
+          <label>Last Name *</label>
+
+          <input
+            type="text"
+            formControlName="lastName"
+            placeholder="Enter last name"
+          >
+
+          <small
+            *ngIf="
+              providerForm.get('lastName')?.touched &&
+              providerForm.get('lastName')?.invalid
+            "
+          >
+            Last name is required
+          </small>
+        </div>
+
+
+        <div class="form-group">
+          <label>Gender *</label>
+
+          <select formControlName="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label>Date of Birth</label>
+
+          <input
+            type="date"
+            formControlName="dateOfBirth"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- Professional Information -->
+
+      <h3>Professional Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Provider ID *</label>
+
+          <input
+            type="text"
+            formControlName="providerId"
+            placeholder="Enter provider ID"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label>Specialization *</label>
+
+          <select formControlName="specialization">
+
+            <option value="">
+              Select Specialization
+            </option>
+
+            <option value="Cardiologist">
+              Cardiologist
+            </option>
+
+            <option value="Neurologist">
+              Neurologist
+            </option>
+
+            <option value="Dermatologist">
+              Dermatologist
+            </option>
+
+            <option value="Orthopedic">
+              Orthopedic
+            </option>
+
+            <option value="Pediatrician">
+              Pediatrician
+            </option>
+
+            <option value="Gynecologist">
+              Gynecologist
+            </option>
+
+            <option value="General Physician">
+              General Physician
+            </option>
+
+            <option value="Surgeon">
+              Surgeon
+            </option>
+
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label>Department *</label>
+
+          <select formControlName="department">
+
+            <option value="">
+              Select Department
+            </option>
+
+            <option value="Cardiology">
+              Cardiology
+            </option>
+
+            <option value="Neurology">
+              Neurology
+            </option>
+
+            <option value="Orthopedics">
+              Orthopedics
+            </option>
+
+            <option value="Pediatrics">
+              Pediatrics
+            </option>
+
+            <option value="Emergency">
+              Emergency
+            </option>
+
+            <option value="Radiology">
+              Radiology
+            </option>
+
+            <option value="General Medicine">
+              General Medicine
+            </option>
+
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label>Qualification *</label>
+
+          <input
+            type="text"
+            formControlName="qualification"
+            placeholder="e.g. MBBS, MD"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label>Medical License Number *</label>
+
+          <input
+            type="text"
+            formControlName="medicalLicenseNo"
+            placeholder="Enter license number"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label>Experience</label>
+
+          <input
+            type="number"
+            formControlName="experience"
+            placeholder="Years of experience"
+            min="0"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label>Joining Date *</label>
+
+          <input
+            type="date"
+            formControlName="joiningDate"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- Contact Information -->
+
+      <h3>Contact Information</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Phone *</label>
+
+          <input
+            type="text"
+            formControlName="phone"
+            maxlength="10"
+            placeholder="Enter 10 digit phone number"
+          >
+
+          <small
+            *ngIf="
+              providerForm.get('phone')?.touched &&
+              providerForm.get('phone')?.invalid
+            "
+          >
+            Enter a valid 10 digit phone number
+          </small>
+        </div>
+
+
+        <div class="form-group">
+          <label>Email *</label>
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter email"
+          >
+
+          <small
+            *ngIf="
+              providerForm.get('email')?.touched &&
+              providerForm.get('email')?.invalid
+            "
+          >
+            Enter a valid email address
+          </small>
+        </div>
+
+      </div>
+
+
+      <!-- Address -->
+
+      <h3>Address</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group full-width">
+          <label>Address</label>
+
+          <textarea
+            formControlName="address"
+            placeholder="Enter complete address"
+          ></textarea>
+        </div>
+
+
+        <div class="form-group">
+          <label>City</label>
+
+          <input
+            type="text"
+            formControlName="city"
+            placeholder="Enter city"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label>State</label>
+
+          <input
+            type="text"
+            formControlName="state"
+            placeholder="Enter state"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label>ZIP Code</label>
+
+          <input
+            type="text"
+            formControlName="zipCode"
+            placeholder="Enter ZIP code"
+          >
+        </div>
+
+      </div>
+
+
+      <!-- Buttons -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="resetForm()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn-save"
+        >
+          Save Provider
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
