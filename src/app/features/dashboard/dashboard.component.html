@@ -1,23 +1,179 @@
 <div class="layout">
   <aside class="sidebar">
-    <div class="brand"><span class="logo">H</span><strong>HMS</strong></div>
-    <nav>
-      <a routerLink="/dashboard/patient" routerLinkActive="active">Patients</a>
-      <a routerLink="/dashboard/staff" routerLinkActive="active">Staff</a>
-      <a routerLink="/dashboard/provider" routerLinkActive="active">Providers</a>
-      <a routerLink="/dashboard/biller" routerLinkActive="active">Billers</a>
+    <a class="brand" routerLink="/dashboard" aria-label="Hospital home">
+      <span class="logo">H</span><span><strong>CarePoint</strong><small>Hospital portal</small></span>
+    </a>
+
+    <div class="nav-caption">WORKSPACE</div>
+    <nav aria-label="Dashboard navigation">
+      @for (item of menuItems; track item.section) {
+        <button type="button" class="nav-item" [class.active]="isMenuActive(item)" (click)="selectMenu(item)">
+          <span class="nav-icon">{{ item.icon }}</span><span>{{ item.label }}</span>
+        </button>
+      }
     </nav>
-    <button class="logout" (click)="logout()">Logout</button>
+
+    <div class="sidebar-spacer"></div>
+    <div class="profile-card">
+      <div class="avatar">{{ roleName.charAt(0) }}</div>
+      <div><strong>{{ roleName }} account</strong><small>Demo portal</small></div>
+    </div>
+    <button type="button" class="logout" (click)="logout()"><span>↪</span> Sign out</button>
   </aside>
 
   <section class="content">
     <header class="topbar">
       <div>
-        <h2>Hospital Management System</h2>
-        <p>Manage patients, staff, providers and billing users.</p>
+        <p class="eyebrow">{{ roleName }} workspace</p>
+        <h1>
+          @if (role === 'staff') { Staff dashboard }
+          @else if (role === 'provider') { Provider dashboard }
+          @else if (role === 'patient') { Patient portal }
+          @else { Hospital management }
+        </h1>
       </div>
-      <span class="secure">Authenticated</span>
+      <div class="topbar-right">
+        <span class="today-label">{{ todayKey }}</span>
+        <span class="secure"><span></span> Signed in</span>
+      </div>
     </header>
-    <main class="page"><router-outlet /></main>
+
+    <main class="page">
+      @if (role === 'admin') {
+        @if (isAdminLanding()) {
+          <section class="welcome-banner">
+            <div><p class="eyebrow">ADMINISTRATION</p><h2>Welcome to your workspace</h2>
+              <p>Manage hospital records and keep your teams connected.</p></div>
+            <span class="welcome-art">✚</span>
+          </section>
+          <div class="stats-grid">
+            <button class="stat-card" (click)="selectMenu(menuItems[1])"><span class="stat-icon blue">♡</span><span>Patient records</span><strong>Patients</strong><small>Open patient management →</small></button>
+            <button class="stat-card" (click)="selectMenu(menuItems[2])"><span class="stat-icon purple">♧</span><span>Team directory</span><strong>Staff</strong><small>Open staff management →</small></button>
+            <button class="stat-card" (click)="selectMenu(menuItems[3])"><span class="stat-icon green">✚</span><span>Care team</span><strong>Providers</strong><small>Open provider management →</small></button>
+          </div>
+        }
+        <router-outlet />
+      } @else if (role === 'staff') {
+        @if (selectedMenu === 'overview') {
+          <section class="welcome-banner">
+            <div><p class="eyebrow">YOUR WORKSPACE</p><h2>Good day, team member</h2>
+              <p>Keep track of your hours, shifts, and workday in one place.</p></div>
+            <span class="welcome-art">◷</span>
+          </section>
+          <div class="stats-grid">
+            <article class="stat-card"><span class="stat-icon blue">◷</span><span>Hours today</span><strong>{{ hoursWorkedToday }}</strong><small>{{ todaysTimeEntry?.clockOut ? 'Shift completed' : todaysTimeEntry ? 'Clocked in' : 'Not clocked in yet' }}</small></article>
+            <article class="stat-card"><span class="stat-icon purple">▦</span><span>Next shift</span><strong>Tomorrow</strong><small>7:00 AM – 3:00 PM</small></article>
+            <article class="stat-card"><span class="stat-icon green">✓</span><span>Timesheet status</span><strong>{{ todaysTimeEntry?.clockOut ? 'Complete' : 'In progress' }}</strong><small>Today · {{ todayKey }}</small></article>
+          </div>
+          <section class="panel quick-panel"><div><p class="eyebrow">TIME TRACKING</p><h2>Ready to start your shift?</h2><p>Clock in and out to keep an accurate record of your hours.</p></div><button class="primary-button" (click)="selectMenu(menuItems[1])">Open time sheet <span>→</span></button></section>
+        } @else if (selectedMenu === 'timesheet') {
+          <div class="page-heading"><div><p class="eyebrow">ATTENDANCE</p><h2>My time sheet</h2><p>Record your shift times. Entries are saved on this device.</p></div><span class="date-pill">{{ todayKey }}</span></div>
+          <section class="panel clock-panel">
+            <div class="clock-summary"><span class="stat-icon blue">◷</span><div><span class="muted">HOURS WORKED TODAY</span><strong>{{ hoursWorkedToday }}</strong><small>{{ todaysTimeEntry ? 'Clock in: ' + formatTime(todaysTimeEntry.clockIn) : 'No active shift' }}</small></div></div>
+            <div class="clock-actions">
+              <button class="primary-button" [disabled]="!!todaysTimeEntry" (click)="clockIn()">Clock in</button>
+              <button class="secondary-button" [disabled]="!todaysTimeEntry || !!todaysTimeEntry.clockOut" (click)="clockOut()">Clock out</button>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading"><div><h3>Recent time entries</h3><p>Your locally saved shift history</p></div><span class="status-badge">This device</span></div>
+            @if (timeEntries.length) {
+              <div class="table-wrap"><table><thead><tr><th>Date</th><th>Clock in</th><th>Clock out</th><th>Status</th></tr></thead>
+                <tbody>@for (entry of timeEntries; track entry.date) {
+                  <tr><td>{{ entry.date }}</td><td>{{ formatTime(entry.clockIn) }}</td><td>{{ formatTime(entry.clockOut) }}</td><td><span class="status-badge" [class.complete]="entry.clockOut">{{ entry.clockOut ? 'Complete' : 'In progress' }}</span></td></tr>
+                }</tbody></table></div>
+            } @else { <div class="empty-state"><span>◷</span><strong>No time entries yet</strong><p>Clock in to begin recording your shift.</p></div> }
+          </section>
+        } @else if (selectedMenu === 'shifts') {
+          <div class="page-heading"><div><p class="eyebrow">MY WORK</p><h2>Upcoming shifts</h2><p>Review your scheduled shifts for this week.</p></div></div>
+          <section class="panel"><div class="schedule-row"><span class="day-tile">Tomorrow<small>7:00 AM</small></span><div><strong>Day shift</strong><p>General ward · 7:00 AM – 3:00 PM</p></div><span class="status-badge">Scheduled</span></div>
+            <div class="schedule-row"><span class="day-tile">Wed<small>7:00 AM</small></span><div><strong>Day shift</strong><p>General ward · 7:00 AM – 3:00 PM</p></div><span class="status-badge">Scheduled</span></div>
+            <div class="schedule-row"><span class="day-tile">Fri<small>3:00 PM</small></span><div><strong>Evening shift</strong><p>General ward · 3:00 PM – 11:00 PM</p></div><span class="status-badge">Scheduled</span></div></section>
+        } @else {
+          <div class="page-heading"><div><p class="eyebrow">ACCOUNT</p><h2>My profile</h2><p>Your staff portal account information.</p></div></div>
+          <section class="panel profile-details"><div class="large-avatar">S</div><div><span class="muted">ROLE</span><strong>Hospital staff</strong><span class="muted">ACCESS</span><strong>Time sheet and shift schedule</strong></div></section>
+        }
+      } @else if (role === 'provider') {
+        @if (selectedMenu === 'overview') {
+          <section class="welcome-banner"><div><p class="eyebrow">CARE TEAM</p><h2>Your clinical workspace</h2><p>Review your appointments and stay on top of your schedule.</p></div><span class="welcome-art">✚</span></section>
+          <div class="stats-grid">
+            <button class="stat-card" (click)="selectMenu(menuItems[1])"><span class="stat-icon blue">◷</span><span>Today</span><strong>3 appointments</strong><small>View appointment list →</small></button>
+            <button class="stat-card" (click)="selectMenu(menuItems[2])"><span class="stat-icon purple">♡</span><span>Patient care</span><strong>Patient list</strong><small>Open your patient list →</small></button>
+            <button class="stat-card" (click)="selectMenu(menuItems[3])"><span class="stat-icon green">▦</span><span>Next availability</span><strong>2:30 PM</strong><small>View your schedule →</small></button>
+          </div>
+          <section class="panel"><div class="panel-heading"><div><h3>Today's schedule</h3><p>Your upcoming appointments</p></div><button class="text-button" (click)="selectMenu(menuItems[1])">See all →</button></div>
+            <div class="schedule-row"><span class="time-label">9:00 AM</span><div><strong>General consultation</strong><p>Patient appointment · Room 2</p></div><span class="status-badge">Upcoming</span></div>
+            <div class="schedule-row"><span class="time-label">10:30 AM</span><div><strong>Follow-up visit</strong><p>Patient appointment · Room 4</p></div><span class="status-badge">Upcoming</span></div></section>
+        } @else if (selectedMenu === 'appointments') {
+          <div class="page-heading"><div><p class="eyebrow">CLINICAL WORK</p><h2>Appointments</h2><p>Your appointment schedule for today.</p></div><span class="date-pill">{{ todayKey }}</span></div>
+          <section class="panel"><div class="schedule-row"><span class="time-label">9:00 AM</span><div><strong>General consultation</strong><p>New patient · Room 2 · 30 minutes</p></div><span class="status-badge">Upcoming</span></div>
+            <div class="schedule-row"><span class="time-label">10:30 AM</span><div><strong>Follow-up visit</strong><p>Returning patient · Room 4 · 30 minutes</p></div><span class="status-badge">Upcoming</span></div>
+            <div class="schedule-row"><span class="time-label">1:00 PM</span><div><strong>Care review</strong><p>Follow-up · Room 2 · 45 minutes</p></div><span class="status-badge">Upcoming</span></div></section>
+        } @else if (selectedMenu === 'patients') {
+          <div class="page-heading"><div><p class="eyebrow">CARE TEAM</p><h2>Patient list</h2><p>Patients on your sample care schedule.</p></div></div>
+          <section class="panel"><div class="schedule-row"><div class="avatar patient-avatar">JD</div><div><strong>Jordan Davis</strong><p>General consultation · Today, 9:00 AM</p></div><span class="status-badge">Scheduled</span></div>
+            <div class="schedule-row"><div class="avatar patient-avatar">AS</div><div><strong>Alex Smith</strong><p>Follow-up visit · Today, 10:30 AM</p></div><span class="status-badge">Scheduled</span></div>
+            <div class="schedule-row"><div class="avatar patient-avatar">RM</div><div><strong>Riley Martin</strong><p>Care review · Today, 1:00 PM</p></div><span class="status-badge">Scheduled</span></div></section>
+        } @else {
+          <div class="page-heading"><div><p class="eyebrow">AVAILABILITY</p><h2>My schedule</h2><p>Your standard clinic hours and next available slots.</p></div></div>
+          <section class="panel schedule-summary"><div><span class="muted">CLINIC HOURS</span><strong>Monday – Friday</strong><p>9:00 AM – 5:00 PM</p></div><div><span class="muted">TODAY'S NEXT OPENING</span><strong>2:30 PM</strong><p>30-minute consultation</p></div><div><span class="muted">LOCATION</span><strong>Outpatient clinic</strong><p>Rooms 2 and 4</p></div></section>
+        }
+      } @else {
+        @if (selectedMenu === 'overview') {
+          <section class="welcome-banner"><div><p class="eyebrow">YOUR CARE, MADE SIMPLE</p><h2>Welcome to your patient portal</h2><p>Book a visit, see your appointments, and keep your care information close.</p></div><span class="welcome-art">♡</span></section>
+          <div class="stats-grid">
+            <button class="stat-card" (click)="selectMenu(menuItems[1])"><span class="stat-icon blue">+</span><span>Need a visit?</span><strong>Book appointment</strong><small>Choose a date and time →</small></button>
+            <button class="stat-card" (click)="selectMenu(menuItems[2])"><span class="stat-icon purple">◷</span><span>Upcoming visits</span><strong>{{ upcomingAppointments.length }}</strong><small>See your appointment list →</small></button>
+            <button class="stat-card" (click)="selectMenu(menuItems[3])"><span class="stat-icon green">♡</span><span>Health information</span><strong>My health</strong><small>View portal information →</small></button>
+          </div>
+          <section class="panel"><div class="panel-heading"><div><h3>Next appointment</h3><p>Your upcoming care</p></div><button class="text-button" (click)="selectMenu(menuItems[2])">See all →</button></div>
+            @if (upcomingAppointments.length) {
+              @for (appointment of upcomingAppointments.slice(0, 1); track appointment.id) {
+                <div class="schedule-row"><span class="stat-icon blue">◷</span><div><strong>{{ appointment.provider }}</strong><p>{{ formatAppointmentDate(appointment.date) }} · {{ appointment.time }}</p></div><span class="status-badge complete">{{ appointment.status }}</span></div>
+              }
+            } @else { <div class="empty-state compact"><strong>No appointments booked</strong><p>Choose a date to schedule your first appointment.</p><button class="primary-button" (click)="selectMenu(menuItems[1])">Book an appointment</button></div> }
+          </section>
+        } @else if (selectedMenu === 'book') {
+          <div class="page-heading"><div><p class="eyebrow">SCHEDULE YOUR CARE</p><h2>Book an appointment</h2><p>Select a date on the calendar, then choose a provider and time.</p></div></div>
+          <div class="booking-layout">
+            <section class="panel calendar-panel">
+              <div class="calendar-heading"><button class="icon-button" type="button" aria-label="Previous month" (click)="changeMonth(-1)">‹</button><h3>{{ monthLabel }}</h3><button class="icon-button" type="button" aria-label="Next month" (click)="changeMonth(1)">›</button></div>
+              <div class="calendar-grid weekday-row">@for (weekday of weekdays; track weekday) { <span>{{ weekday }}</span> }</div>
+              <div class="calendar-grid days-grid">@for (day of calendarDays; track day.key) {
+                <button type="button" class="calendar-day" [class.outside]="!day.inMonth" [class.selected]="day.key === selectedDate" [class.today]="day.isToday" [class.has-appointment]="day.appointmentCount > 0" [attr.aria-label]="day.key + (day.appointmentCount ? ', appointment booked' : '')" (click)="selectDate(day)">
+                  {{ day.date }} @if (day.appointmentCount) { <span class="appointment-dot"></span> }
+                </button>
+              }</div>
+              <div class="calendar-legend"><span><i class="legend-dot selected-dot"></i> Selected</span><span><i class="legend-dot appointment-legend"></i> Appointment</span></div>
+            </section>
+            <section class="panel booking-panel">
+              <p class="eyebrow">SELECTED DATE</p><h3>{{ selectedDateLabel }}</h3>
+              <div class="field"><label for="provider">Provider</label><select id="provider" [(ngModel)]="selectedProvider">@for (provider of providerNames; track provider) { <option [value]="provider">{{ provider }}</option> }</select></div>
+              <div class="field"><label for="time">Available time</label><select id="time" [(ngModel)]="selectedTime"><option value="09:00">9:00 AM</option><option value="10:30">10:30 AM</option><option value="13:00">1:00 PM</option><option value="14:30">2:30 PM</option><option value="16:00">4:00 PM</option></select></div>
+              <button class="primary-button full-button" (click)="bookAppointment()">Confirm appointment</button>
+              @if (bookingMessage) { <p class="booking-message" [class.success-message]="bookingMessage.startsWith('Appointment booked')">{{ bookingMessage }}</p> }
+              @if (selectedDateAppointments.length) {
+                <div class="date-appointments"><strong>Already booked this day</strong>
+                  @for (appointment of selectedDateAppointments; track appointment.id) { <p>{{ appointment.time }} · {{ appointment.provider }}</p> }
+                </div>
+              }
+              <p class="privacy-note">Demo appointments are saved in this browser only.</p>
+            </section>
+          </div>
+        } @else if (selectedMenu === 'appointments') {
+          <div class="page-heading"><div><p class="eyebrow">YOUR VISITS</p><h2>My appointments</h2><p>View or cancel appointments saved in this browser.</p></div><button class="primary-button" (click)="selectMenu(menuItems[1])">+ Book appointment</button></div>
+          <section class="panel">
+            @if (upcomingAppointments.length) {
+              @for (appointment of upcomingAppointments; track appointment.id) {
+                <div class="schedule-row"><span class="stat-icon blue">◷</span><div><strong>{{ appointment.provider }}</strong><p>{{ formatAppointmentDate(appointment.date) }} · {{ appointment.time }}</p></div><span class="status-badge complete">{{ appointment.status }}</span><button class="cancel-button" (click)="cancelAppointment(appointment)">Cancel</button></div>
+              }
+            } @else { <div class="empty-state"><span>◷</span><strong>No upcoming appointments</strong><p>Book a visit when you are ready to schedule care.</p><button class="primary-button" (click)="selectMenu(menuItems[1])">Book appointment</button></div> }
+          </section>
+        } @else {
+          <div class="page-heading"><div><p class="eyebrow">PATIENT INFORMATION</p><h2>My health</h2><p>Your personal care portal information.</p></div></div>
+          <section class="panel health-info"><span class="stat-icon green">♡</span><div><h3>Your care information</h3><p>This demo portal is ready for secure health records and care-team information to be connected.</p><p>For privacy, patient data in this demo is stored only in your browser.</p></div></section>
+        }
+      }
+    </main>
   </section>
 </div>

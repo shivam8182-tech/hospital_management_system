@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+export type UserRole = 'admin' | 'staff' | 'provider' | 'patient';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly key = 'hms_auth';
@@ -8,10 +10,18 @@ export class AuthService {
 
   readonly loggedIn$ = this.loggedInSubject.asObservable();
 
+  private readonly demoAccounts: Record<UserRole, string> = {
+    admin: 'Admin@123',
+    staff: 'Staff@123',
+    provider: 'Provider@123',
+    patient: 'Patient@123'
+  };
+
   login(username: string, password: string): boolean {
     // Demo only. Replace with an API call and server-side authentication.
-    if (username === 'admin' && password === 'Admin@123') {
-      localStorage.setItem(this.key, 'true');
+    const role = username.trim().toLowerCase() as UserRole;
+    if (role in this.demoAccounts && this.demoAccounts[role] === password) {
+      localStorage.setItem(this.key, role);
       this.loggedInSubject.next(true);
       return true;
     }
@@ -24,6 +34,13 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return localStorage.getItem(this.key) === 'true';
+    return this.getRole() !== null;
+  }
+
+  getRole(): UserRole | null {
+    const role = localStorage.getItem(this.key);
+    return role === 'admin' || role === 'staff' || role === 'provider' || role === 'patient'
+      ? role
+      : null;
   }
 }

@@ -1,24 +1,36 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { EntityService } from '../../../core/services/entity.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { FormFieldErrorComponent } from '../../../shared/components/form-field-error/form-field-error.component';
+
+const nameValidators = [Validators.required, Validators.pattern(/^[A-Za-z][A-Za-z' -]*$/), Validators.maxLength(50)];
 
 @Component({
   selector: 'app-add-patient',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormFieldErrorComponent
   ],
   templateUrl: './add-patient.component.html',
   styleUrl: './add-patient.component.css'
 })
 export class AddPatientComponent {
+  private readonly entityService = inject(EntityService);
+  private readonly toast = inject(ToastService);
+  private readonly router = inject(Router);
 
   currentStep = 0;
 
@@ -60,9 +72,9 @@ export class AddPatientComponent {
       // =================================
 
       personalInfo: this.fb.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        dateOfBirth: ['', Validators.required],
+        firstName: ['', nameValidators],
+        lastName: ['', nameValidators],
+        dateOfBirth: ['', [Validators.required, this.notFutureDate]],
         gender: ['', Validators.required],
         maritalStatus: ['']
       }),
@@ -72,7 +84,7 @@ export class AddPatientComponent {
       // =================================
 
       contactInfo: this.fb.group({
-        phone: [
+          phone: [
           '',
           [
             Validators.required,
@@ -153,10 +165,10 @@ export class AddPatientComponent {
 
     return this.fb.group({
       addressType: ['Home', Validators.required],
-      address: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      zipCode: ['', Validators.required]
+      address: ['', [Validators.required, Validators.pattern(/\S/)]],
+      city: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(60)]],
+      state: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(60)]],
+      zipCode: ['', [Validators.required, Validators.pattern(/^\d{5}(?:-\d{4})?$/)]]
     });
   }
 
@@ -179,7 +191,7 @@ export class AddPatientComponent {
   createEmergencyContact(): FormGroup {
 
     return this.fb.group({
-      name: ['', Validators.required],
+      name: ['', nameValidators],
       relationship: ['', Validators.required],
       phone: [
         '',
@@ -212,8 +224,8 @@ export class AddPatientComponent {
   createInsurance(): FormGroup {
 
     return this.fb.group({
-      providerName: ['', Validators.required],
-      policyNumber: ['', Validators.required],
+      providerName: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(80)]],
+      policyNumber: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9-]{3,30}$/)]],
       memberId: [''],
       groupNumber: [''],
       insuranceType: ['Primary']
@@ -239,11 +251,14 @@ export class AddPatientComponent {
   // =================================
 
   nextStep(): void {
-
-    if (this.currentStep < this.steps.length - 1) {
-
-      this.currentStep++;
+    if (this.currentStep >= this.steps.length - 1) return;
+    const group = this.stepControl(this.currentStep);
+    if (group.invalid) {
+      group.markAllAsTouched();
+      this.toast.error('Please complete the highlighted required fields before continuing.');
+      return;
     }
+    this.currentStep++;
   }
 
 
@@ -278,55 +293,65 @@ export class AddPatientComponent {
   // =================================
 
   savePatient(): void {
-
     if (this.patientForm.invalid) {
-
       this.patientForm.markAllAsTouched();
-
-      alert('Please complete all required fields.');
-
+      const firstInvalidStep = this.steps.findIndex((_, index) => this.stepControl(index).invalid);
+      this.currentStep = firstInvalidStep < 0 ? 0 : firstInvalidStep;
+      this.toast.error('Please correct the highlighted fields before saving the patient.');
       return;
     }
 
+    const values = this.patientForm.getRawValue();
+    const id = `P${Date.now()}`;
     const patient = {
-      id: Date.now(),
-      ...this.patientForm.value
+      ...values.personalInfo,
+      ...values.contactInfo,
+      ...values.medicalInfo,
+      id,
+      name: `${values.personalInfo.firstName.trim()} ${values.personalInfo.lastName.trim()}`,
+      email: values.contactInfo.email.trim(),
+      phone: values.contactInfo.phone,
+      dob: values.personalInfo.dateOfBirth,
+      mrn: id,
+      address: values.addresses[0]?.address ?? '',
+      status: 'Active' as const,
+      addresses: values.addresses,
+      emergencyContacts: values.emergencyContacts,
+      insurancePolicies: values.insurance
     };
 
-    console.log('Patient Data:', patient);
+    try {
+      this.entityService.addEntity('patient', patient);
+      console.log('Patient added:', patient);
+      this.toast.success('Patient added successfully.');
+      this.resetForm();
+      void this.router.navigate(['/dashboard/patient']);
+    } catch (error) {
+      console.error('Failed to save patient:', error);
+      this.toast.error(this.errorMessage(error, 'Unable to save the patient. Please try again.'));
+    }
+  }
 
-    // Get existing patients
-    const patients = JSON.parse(
-      localStorage.getItem('patients') || '[]'
-    );
-
-    // Add patient
-    patients.push(patient);
-
-    // Save patients
-    localStorage.setItem(
-      'patients',
-      JSON.stringify(patients)
-    );
-
-    alert('Patient added successfully!');
-
-    // Reset form
+  resetForm(): void {
     this.patientForm.reset();
-
-    // Reset FormArrays
     this.addresses.clear();
     this.addresses.push(this.createAddress());
-
     this.emergencyContacts.clear();
-    this.emergencyContacts.push(
-      this.createEmergencyContact()
-    );
-
+    this.emergencyContacts.push(this.createEmergencyContact());
     this.insurance.clear();
     this.insurance.push(this.createInsurance());
-
-    // Go to first widget
     this.currentStep = 0;
+  }
+
+  private stepControl(index: number): AbstractControl {
+    const paths = ['personalInfo', 'contactInfo', 'addresses', 'emergencyContacts', 'medicalInfo', 'insurance'];
+    return this.patientForm.get(paths[index])!;
+  }
+
+  private readonly notFutureDate = (control: AbstractControl) =>
+    control.value && control.value > new Date().toISOString().slice(0, 10) ? { futureDate: true } : null;
+
+  private errorMessage(error: unknown, fallback: string): string {
+    return error instanceof Error ? error.message : fallback;
   }
 }

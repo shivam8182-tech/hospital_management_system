@@ -3,7 +3,6 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { fieldsMatch } from '../../core/validators/custom.validators';
 
 @Component({
   selector: 'app-login',
@@ -22,10 +21,8 @@ export class LoginComponent {
   loginForm = new FormGroup(
     {
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
-      confirmPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] })
-    },
-    { validators: [fieldsMatch('password', 'confirmPassword')] }
+      password: new FormControl('', { nonNullable: true, validators: [Validators.required] })
+    }
   );
 
   submit(): void {

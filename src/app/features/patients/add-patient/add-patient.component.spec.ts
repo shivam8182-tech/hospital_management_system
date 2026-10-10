@@ -37,7 +37,14 @@ describe('AddPatientComponent', () => {
   });
 
   it('rejects an invalid patient name', () => {
-    component.patientForm.controls.name.setValue('123');
-    expect(component.patientForm.controls.name.invalid).toBeTrue();
+    const firstName = component.patientForm.get('personalInfo.firstName');
+    firstName?.setValue('123');
+    expect(firstName?.invalid).toBeTrue();
+  });
+
+  it('does not advance while the current step is invalid', () => {
+    component.nextStep();
+    expect(component.currentStep).toBe(0);
+    expect(component.patientForm.get('personalInfo.firstName')?.touched).toBeTrue();
   });
 });

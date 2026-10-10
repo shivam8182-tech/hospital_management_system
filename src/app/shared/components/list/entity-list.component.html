@@ -1,5 +1,5 @@
 <div class="toolbar">
-  <input [(ngModel)]="search" placeholder="Search {{ type }}..." aria-label="Search">
+  <input [(ngModel)]="search" (ngModelChange)="onSearchChange()" placeholder="Search {{ type }}..." aria-label="Search">
 </div>
 
 <div class="table-wrap">
@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (row of filteredRows; track row.id) {
+    @for (row of pageRows; track row.id) {
       <tr>
         <td>{{ row.id }}</td>
         <td>{{ row.name }}</td>
@@ -26,4 +26,30 @@
     }
   </tbody>
 </table>
+</div>
+
+<div class="pagination" aria-label="List pagination">
+  <div class="pagination-summary" aria-live="polite">
+    Showing <strong>{{ firstVisibleRow }}–{{ lastVisibleRow }}</strong> of
+    <strong>{{ filteredRows.length }}</strong> {{ type }} records
+  </div>
+
+  <div class="pagination-controls">
+    <label class="page-size">
+      Rows per page
+      <select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()" aria-label="Rows per page">
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="25">25</option>
+      </select>
+    </label>
+
+    <button type="button" class="page-button" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)" aria-label="Previous page">
+      Previous
+    </button>
+    <span class="page-indicator">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button type="button" class="page-button" [disabled]="currentPage >= totalPages" (click)="goToPage(currentPage + 1)" aria-label="Next page">
+      Next
+    </button>
+  </div>
 </div>

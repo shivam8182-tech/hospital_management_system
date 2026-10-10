@@ -5,7 +5,7 @@ import { authGuard } from './auth.guard';
 
 describe('authGuard', () => {
   it('allows authenticated users', () => {
-    localStorage.setItem('hms_auth', 'true');
+    localStorage.setItem('hms_auth', 'admin');
     TestBed.configureTestingModule({
       providers: [AuthService, Router]
     });

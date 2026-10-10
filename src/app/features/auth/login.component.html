@@ -4,7 +4,7 @@
       <div class="logo">H</div>
       <div>
         <h1>Hospital Management</h1>
-        <p>Secure staff portal</p>
+        <p>Secure hospital portal</p>
       </div>
     </div>
 
@@ -20,23 +20,19 @@
       @if (loginForm.controls.password.touched && loginForm.controls.password.errors?.['required']) {
         <small class="error">Password is required.</small>
       }
-      @if (loginForm.controls.password.touched && loginForm.controls.password.errors?.['minlength']) {
-        <small class="error">Password must contain at least 8 characters.</small>
-      }
-
-      <label>Confirm Password</label>
-      <input type="password" formControlName="confirmPassword" placeholder="Confirm password">
-      @if (loginForm.touched && loginForm.errors?.['fieldsMismatch']) {
-        <small class="error">Password and confirm password must match.</small>
-      }
-
       @if (error) {
         <div class="error-box">{{ error }}</div>
       }
 
-      <button type="submit">Login</button>
+      <button type="submit">Sign in</button>
     </form>
 
-    <p class="demo">Demo: <strong>admin</strong> / <strong>Admin&#64;123</strong></p>
+    <div class="demo">
+      <strong>Demo accounts</strong>
+      <p>Admin: admin / Admin&#64;123</p>
+      <p>Staff: staff / Staff&#64;123</p>
+      <p>Provider: provider / Provider&#64;123</p>
+      <p>Patient: patient / Patient&#64;123</p>
+    </div>
   </section>
 </main>

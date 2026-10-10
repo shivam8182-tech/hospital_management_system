@@ -26,6 +26,7 @@
             formControlName="firstName"
             placeholder="Enter first name"
           >
+          <app-form-field-error [control]="providerForm.get('firstName')" label="First name" />
 
           <small
             *ngIf="
@@ -46,6 +47,7 @@
             formControlName="lastName"
             placeholder="Enter last name"
           >
+          <app-form-field-error [control]="providerForm.get('lastName')" label="Last name" />
 
           <small
             *ngIf="
@@ -67,6 +69,7 @@
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
+          <app-form-field-error [control]="providerForm.get('gender')" label="Gender" />
         </div>
 
 
@@ -77,6 +80,7 @@
             type="date"
             formControlName="dateOfBirth"
           >
+          <app-form-field-error [control]="providerForm.get('dateOfBirth')" label="Date of birth" />
         </div>
 
       </div>
@@ -96,6 +100,7 @@
             formControlName="providerId"
             placeholder="Enter provider ID"
           >
+          <app-form-field-error [control]="providerForm.get('providerId')" label="Provider ID" />
         </div>
 
 
@@ -141,6 +146,7 @@
             </option>
 
           </select>
+          <app-form-field-error [control]="providerForm.get('specialization')" label="Specialization" />
         </div>
 
 
@@ -182,6 +188,7 @@
             </option>
 
           </select>
+          <app-form-field-error [control]="providerForm.get('department')" label="Department" />
         </div>
 
 
@@ -193,6 +200,7 @@
             formControlName="qualification"
             placeholder="e.g. MBBS, MD"
           >
+          <app-form-field-error [control]="providerForm.get('qualification')" label="Qualification" />
         </div>
 
 
@@ -204,6 +212,7 @@
             formControlName="medicalLicenseNo"
             placeholder="Enter license number"
           >
+          <app-form-field-error [control]="providerForm.get('medicalLicenseNo')" label="Medical license number" />
         </div>
 
 
@@ -216,6 +225,7 @@
             placeholder="Years of experience"
             min="0"
           >
+          <app-form-field-error [control]="providerForm.get('experience')" label="Experience" />
         </div>
 
 
@@ -226,6 +236,7 @@
             type="date"
             formControlName="joiningDate"
           >
+          <app-form-field-error [control]="providerForm.get('joiningDate')" label="Joining date" />
         </div>
 
       </div>
@@ -247,14 +258,7 @@
             placeholder="Enter 10 digit phone number"
           >
 
-          <small
-            *ngIf="
-              providerForm.get('phone')?.touched &&
-              providerForm.get('phone')?.invalid
-            "
-          >
-            Enter a valid 10 digit phone number
-          </small>
+          <app-form-field-error [control]="providerForm.get('phone')" label="Phone" />
         </div>
 
 
@@ -267,14 +271,7 @@
             placeholder="Enter email"
           >
 
-          <small
-            *ngIf="
-              providerForm.get('email')?.touched &&
-              providerForm.get('email')?.invalid
-            "
-          >
-            Enter a valid email address
-          </small>
+          <app-form-field-error [control]="providerForm.get('email')" label="Email" />
         </div>
 
       </div>
@@ -293,6 +290,7 @@
             formControlName="address"
             placeholder="Enter complete address"
           ></textarea>
+          <app-form-field-error [control]="providerForm.get('address')" label="Address" />
         </div>
 
 
@@ -304,6 +302,7 @@
             formControlName="city"
             placeholder="Enter city"
           >
+          <app-form-field-error [control]="providerForm.get('city')" label="City" />
         </div>
 
 
@@ -315,6 +314,7 @@
             formControlName="state"
             placeholder="Enter state"
           >
+          <app-form-field-error [control]="providerForm.get('state')" label="State" />
         </div>
 
 
@@ -326,6 +326,7 @@
             formControlName="zipCode"
             placeholder="Enter ZIP code"
           >
+          <app-form-field-error [control]="providerForm.get('zipCode')" label="ZIP code" />
         </div>
 
       </div>

@@ -8,6 +8,7 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
 
   beforeEach(async () => {
+    localStorage.removeItem('hms_auth');
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
@@ -20,16 +21,19 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterEach(() => localStorage.removeItem('hms_auth'));
+
   it('creates the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('detects password mismatch', () => {
+  it('signs in a staff demo account and opens the dashboard', () => {
     component.loginForm.patchValue({
-      username: 'admin',
-      password: 'Admin@123',
-      confirmPassword: 'Wrong@123'
+      username: 'staff',
+      password: 'Staff@123'
     });
-    expect(component.loginForm.errors?.['fieldsMismatch']).toBeTrue();
+    component.submit();
+    expect(localStorage.getItem('hms_auth')).toBe('staff');
+    expect(TestBed.inject(Router).navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 });

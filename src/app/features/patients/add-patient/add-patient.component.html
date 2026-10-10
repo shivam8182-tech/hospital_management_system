@@ -98,15 +98,7 @@
               formControlName="firstName"
               placeholder="Enter first name"
             >
-
-            <small
-              *ngIf="
-                patientForm.get('personalInfo.firstName')?.touched &&
-                patientForm.get('personalInfo.firstName')?.invalid
-              "
-            >
-              First name is required
-            </small>
+            <app-form-field-error [control]="patientForm.get('personalInfo.firstName')" label="First name" />
 
           </div>
 
@@ -120,6 +112,7 @@
               formControlName="lastName"
               placeholder="Enter last name"
             >
+            <app-form-field-error [control]="patientForm.get('personalInfo.lastName')" label="Last name" />
 
           </div>
 
@@ -132,6 +125,7 @@
               type="date"
               formControlName="dateOfBirth"
             >
+            <app-form-field-error [control]="patientForm.get('personalInfo.dateOfBirth')" label="Date of birth" />
 
           </div>
 
@@ -159,6 +153,7 @@
               </option>
 
             </select>
+            <app-form-field-error [control]="patientForm.get('personalInfo.gender')" label="Gender" />
 
           </div>
 
@@ -254,15 +249,7 @@
               maxlength="10"
               placeholder="Enter 10 digit number"
             >
-
-            <small
-              *ngIf="
-                patientForm.get('contactInfo.phone')?.touched &&
-                patientForm.get('contactInfo.phone')?.invalid
-              "
-            >
-              Enter a valid 10 digit phone number
-            </small>
+            <app-form-field-error [control]="patientForm.get('contactInfo.phone')" label="Phone" />
 
           </div>
 
@@ -276,15 +263,7 @@
               formControlName="email"
               placeholder="Enter email"
             >
-
-            <small
-              *ngIf="
-                patientForm.get('contactInfo.email')?.touched &&
-                patientForm.get('contactInfo.email')?.invalid
-              "
-            >
-              Enter a valid email
-            </small>
+            <app-form-field-error [control]="patientForm.get('contactInfo.email')" label="Email" />
 
           </div>
 
@@ -404,6 +383,7 @@
                   formControlName="address"
                   placeholder="Enter address"
                 >
+                <app-form-field-error [control]="addresses.at(i).get('address')" label="Address" />
 
               </div>
 
@@ -417,6 +397,7 @@
                   formControlName="city"
                   placeholder="Enter city"
                 >
+                <app-form-field-error [control]="addresses.at(i).get('city')" label="City" />
 
               </div>
 
@@ -430,6 +411,7 @@
                   formControlName="state"
                   placeholder="Enter state"
                 >
+                <app-form-field-error [control]="addresses.at(i).get('state')" label="State" />
 
               </div>
 
@@ -443,6 +425,7 @@
                   formControlName="zipCode"
                   placeholder="Enter ZIP code"
                 >
+                <app-form-field-error [control]="addresses.at(i).get('zipCode')" label="ZIP code" />
 
               </div>
 
@@ -552,6 +535,7 @@
                   formControlName="name"
                   placeholder="Enter name"
                 >
+                <app-form-field-error [control]="emergencyContacts.at(i).get('name')" label="Contact name" />
 
               </div>
 
@@ -595,6 +579,7 @@
                   </option>
 
                 </select>
+                <app-form-field-error [control]="emergencyContacts.at(i).get('relationship')" label="Relationship" />
 
               </div>
 
@@ -609,6 +594,7 @@
                   maxlength="10"
                   placeholder="Enter phone"
                 >
+                <app-form-field-error [control]="emergencyContacts.at(i).get('phone')" label="Phone" />
 
               </div>
 
@@ -847,6 +833,7 @@
                   formControlName="providerName"
                   placeholder="Insurance company"
                 >
+                <app-form-field-error [control]="insurance.at(i).get('providerName')" label="Insurance provider" />
 
               </div>
 
@@ -860,6 +847,7 @@
                   formControlName="policyNumber"
                   placeholder="Policy number"
                 >
+                <app-form-field-error [control]="insurance.at(i).get('policyNumber')" label="Policy number" />
 
               </div>
 

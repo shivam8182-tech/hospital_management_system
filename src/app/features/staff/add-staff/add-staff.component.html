@@ -22,12 +22,7 @@
             formControlName="firstName"
             placeholder="Enter first name"
           >
-
-          <small
-            *ngIf="staffForm.get('firstName')?.touched &&
-                   staffForm.get('firstName')?.invalid">
-            First name is required
-          </small>
+          <app-form-field-error [control]="staffForm.get('firstName')" label="First name" />
         </div>
 
         <div class="form-group">
@@ -37,6 +32,7 @@
             formControlName="lastName"
             placeholder="Enter last name"
           >
+          <app-form-field-error [control]="staffForm.get('lastName')" label="Last name" />
         </div>
 
         <div class="form-group">
@@ -45,6 +41,7 @@
             type="date"
             formControlName="dateOfBirth"
           >
+          <app-form-field-error [control]="staffForm.get('dateOfBirth')" label="Date of birth" />
         </div>
 
         <div class="form-group">
@@ -56,6 +53,7 @@
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
+          <app-form-field-error [control]="staffForm.get('gender')" label="Gender" />
         </div>
 
       </div>
@@ -73,6 +71,7 @@
             maxlength="10"
             placeholder="Enter 10 digit number"
           >
+          <app-form-field-error [control]="staffForm.get('phone')" label="Phone" />
         </div>
 
         <div class="form-group">
@@ -82,6 +81,7 @@
             formControlName="email"
             placeholder="Enter email"
           >
+          <app-form-field-error [control]="staffForm.get('email')" label="Email" />
         </div>
 
       </div>
@@ -98,6 +98,7 @@
             formControlName="staffId"
             placeholder="Enter staff ID"
           >
+          <app-form-field-error [control]="staffForm.get('staffId')" label="Staff ID" />
         </div>
 
         <div class="form-group">
@@ -111,6 +112,7 @@
             <option value="Technician">Technician</option>
             <option value="Manager">Manager</option>
           </select>
+          <app-form-field-error [control]="staffForm.get('role')" label="Role" />
         </div>
 
         <div class="form-group">
@@ -125,6 +127,7 @@
             <option value="Pharmacy">Pharmacy</option>
             <option value="Administration">Administration</option>
           </select>
+          <app-form-field-error [control]="staffForm.get('department')" label="Department" />
         </div>
 
         <div class="form-group">
@@ -134,6 +137,7 @@
             type="date"
             formControlName="joiningDate"
           >
+          <app-form-field-error [control]="staffForm.get('joiningDate')" label="Joining date" />
         </div>
 
       </div>
@@ -150,6 +154,7 @@
             formControlName="address"
             placeholder="Enter address"
           ></textarea>
+          <app-form-field-error [control]="staffForm.get('address')" label="Address" />
         </div>
 
         <div class="form-group">
@@ -159,6 +164,7 @@
             formControlName="city"
             placeholder="Enter city"
           >
+          <app-form-field-error [control]="staffForm.get('city')" label="City" />
         </div>
 
         <div class="form-group">
@@ -168,6 +174,7 @@
             formControlName="state"
             placeholder="Enter state"
           >
+          <app-form-field-error [control]="staffForm.get('state')" label="State" />
         </div>
 
         <div class="form-group">
@@ -177,6 +184,7 @@
             formControlName="zipCode"
             placeholder="Enter ZIP code"
           >
+          <app-form-field-error [control]="staffForm.get('zipCode')" label="ZIP code" />
         </div>
 
       </div>
@@ -187,7 +195,7 @@
         <button
           type="button"
           class="btn-cancel"
-          (click)="staffForm.reset()">
+          (click)="resetForm()">
           Cancel
         </button>
 

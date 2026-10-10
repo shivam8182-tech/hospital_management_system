@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -16,15 +17,10 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [authGuard],
+    canActivateChild: [adminGuard],
     loadComponent: () =>
       import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
     children: [
-      {
-        path: '',
-        redirectTo: 'patient',
-        pathMatch: 'full'
-      },
-      
       {
         path: 'patient/add',
         loadComponent: () =>
